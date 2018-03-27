@@ -1,2 +1,7 @@
 # MinaASyncToSync
 使用mina异步通讯转为同步
+	在处理部分异步通讯请求时 有时Client端需要同步处理<br>
+	因此我们可以把请求交给mina来处理,使用一个IoAcceptor绑定多个端口,不同端口处理不同的请求<br>
+	当我们需要调用异步请求时,使用IoConnector长连接将请求转发至mina的Server端 server端根据请求端口来判断是请求还是异步响应<br>
+	此Demo使用自定义编码器来处理tcp粘包,以前6位表示请求报文的长度不足补0 第6位至12位为请求的唯一标识<br>
+	使用时先运行MinaTest中main方法 在运行TestServerSocket 和TestClientSocket
