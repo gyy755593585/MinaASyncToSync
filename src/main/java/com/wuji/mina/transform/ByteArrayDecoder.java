@@ -9,7 +9,8 @@ public class ByteArrayDecoder extends CumulativeProtocolDecoder {
 
 	@Override
 	public boolean doDecode(IoSession session, IoBuffer in, ProtocolDecoderOutput out) throws Exception {
-		if (in.remaining() > 6) {// 前6字节是包头
+		// 前6字节是包头
+		if (in.remaining() > 6) {
 			// 标记当前position的快照标记mark，以便后继的reset操作能恢复position位置
 			in.mark();
 			byte[] l = new byte[6];
@@ -30,17 +31,21 @@ public class ByteArrayDecoder extends CumulativeProtocolDecoder {
 				return false;
 			} else {
 				// 消息内容足够
-				in.reset();// 重置恢复position位置到操作前
-				int sumlen = len + 6;// 总长 = 包头+包体
+				// 重置恢复position位置到操作前
+				in.reset();
+				// 总长 = 包头+包体
+				int sumlen = len + 6;
 				byte[] packArr = new byte[sumlen];
 				in.get(packArr, 0, sumlen);
 				out.write(packArr);
-				if (in.remaining() > 0) {// 如果读取一个完整包内容后还粘了包，就让父类再调用一次，进行下一次解析
+				// 如果读取一个完整包内容后还粘了包，就让父类再调用一次，进行下一次解析
+				if (in.remaining() > 0) {
 					return true;
 				}
 			}
 		}
-		return false;// 处理成功，让父类进行接收下个包
+		// 处理成功，让父类进行接收下个包
+		return false;
 	}
 
 }
